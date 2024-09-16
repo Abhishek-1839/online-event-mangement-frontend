@@ -23,6 +23,7 @@
     "@stripe/stripe-js": "^4.4.0",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
+    "hamburger-react": "^2.5.1",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.441.0",

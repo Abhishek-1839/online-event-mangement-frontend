@@ -7,9 +7,9 @@ function Carousell() {
         <Carousel data-bs-theme="dark" interval={2000} prevIcon={null} nextIcon={null}>
             <Carousel.Item>
                 <img
-                    className="d-block w-100 w-64"
+                    className="d-block lg:w-full md:w-96 sm:w-52 w-100"
                     src={firstSlide}
-                    alt="First slide" style={{height:"470px"}}
+                    alt="First slide"
                 />
                 <Carousel.Caption>
                    
@@ -17,10 +17,9 @@ function Carousell() {
             </Carousel.Item>
             <Carousel.Item>
                 <img
-                    className="d-block w-100 w-64"
+                    className="d-block lg:w-full md:w-96 sm:w-52 w-100"
                     src={secondSlide}
                     alt="Second slide"
-                    style={{height:"470px"}}
                 />
                 <Carousel.Caption>
                     

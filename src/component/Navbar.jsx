@@ -1,64 +1,83 @@
-import React, { useState, useEffect } from 'react';
-// import PersonIcon from '@mui/icons-material/Person';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/authSlice';
-const Navbar = () => {
 
+const Navbar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(state => state.auth.isAuthenticated);
-
-
-    // useEffect(() => {
-    //     // Check if user is logged in
-    //     const checkAuthStatus = () => {
-    //         const token = localStorage.getItem('token'); // Assuming you store the auth token in localStorage
-    //         setIsLoggedIn(!!token);
-    //     };
-
-    //     checkAuthStatus();
-    //     // You might want to set up a listener for auth state changes here
-    // }, []);
-
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const handleClick = () => {
-        navigate('/eventschedule')
+        navigate('/eventschedule');
+        setIsMenuOpen(false);
     }
 
     const handleEvent = () => {
-        navigate('/eventform')
+        navigate('/eventform');
+        setIsMenuOpen(false);
     }
- const handleauth = () => {
-    if (isLoggedIn) {
-        // Logout logic
-        localStorage.removeItem('token');
-        dispatch(logout());
-        navigate('/'); // Redirect to home page after logout
-    } else {
-        navigate('/auth');
-    }
+
+    const handleauth = () => {
+        if (isLoggedIn) {
+            localStorage.removeItem('token');
+            dispatch(logout());
+            navigate('/');
+        } else {
+            navigate('/auth');
+        }
+        setIsMenuOpen(false);
     };
 
     return (
-        <nav className=" bg-red-600 text-white py-3 px-6 flex items-center justify-between h-24">
-            {/* Left section: Logo */}
-            <div className="flex items-center space-x-4">
-                <Link to="/" className="font-bold text-3xl">LeisureBookings.in</Link>
-            </div>
-            {/* Right section: Options */}
-            <div className="flex items-center space-x-4">
-                <button className="text-xl px-4 py-2 border border-white rounded-full bg-transparent hover:bg-white hover:text-black transition" onClick={handleClick}>Event Schedules</button>
-                <button className="text-xl px-4 py-2 border border-white rounded-full bg-transparent hover:bg-white hover:text-black transition" onClick={handleEvent}>
-                    Add your event
-                </button>
-                <button className="text-xl px-4 py-2 border border-white rounded-full bg-transparent hover:bg-white hover:text-black transition" onClick={handleauth}>
-                    {isLoggedIn ? 'Logout' : 'Login/Register'}
+        <nav className="bg-red-600 text-white py-4 px-4 md:py-3 md:px-6">
+            <div className="flex items-center justify-between">
+                {/* Logo */}
+                <Link to="/" className="font-bold text-2xl md:text-3xl">LeisureBookings.in</Link>
+
+                {/* Hamburger menu for mobile */}
+                <button 
+                    className="lg:hidden md:flex sm:flex focus:outline-none"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
                 </button>
 
+                {/* Desktop menu */}
+                <div className="lg:flex md:hidden sm:hidden hidden items-center space-x-4">
+                    <NavButton onClick={handleClick}>Event Schedules</NavButton>
+                    <NavButton onClick={handleEvent}>Add your event</NavButton>
+                    <NavButton onClick={handleauth}>
+                        {isLoggedIn ? 'Logout' : 'Login/Register'}
+                    </NavButton>
+                </div>
             </div>
+
+            {/* Mobile menu */}
+            {isMenuOpen && (
+                <div className="mt-4 md:flex flex-col">
+                    <NavButton className="block w-full mb-2" onClick={handleClick}>Event Schedules</NavButton>
+                    <NavButton className="block w-full mb-2" onClick={handleEvent}>Add your event</NavButton>
+                    <NavButton className="block w-full mb-2" onClick={handleauth}>
+                        {isLoggedIn ? 'Logout' : 'Login/Register'}
+                    </NavButton>
+                </div>
+            )}
         </nav>
     );
 };
+
+// Reusable NavButton component
+const NavButton = ({ children, className = "", ...props }) => (
+    <button 
+        className={`text-lg px-4 py-2 border border-white rounded-full bg-transparent hover:bg-white hover:text-red-600 transition ${className}`}
+        {...props}
+    >
+        {children}
+    </button>
+);
 
 export default Navbar;
