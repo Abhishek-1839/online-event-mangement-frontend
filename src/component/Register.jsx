@@ -58,25 +58,25 @@ console.log(response.status);
                 <div>
       <div className="flex items-center justify-center min-h-screen">
       <div className="w-full max-w-md">
-        <div className="relative bg-white bg-opacity-10 p-8 rounded-2xl shadow-xl backdrop-filter backdrop-blur-lg border border-opacity-30 border-white" style={{height:"700px", width:"550px"}}>
+        <div className="relative bg-white bg-opacity-10 p-8 rounded-2xl shadow-xl backdrop-filter backdrop-blur-lg border border-opacity-30 border-white w-full sm:w-96 md:w-[450px] lg:w-[550px] h-auto sm:h-96 md:h-112 lg:h-[600px]">
           <div className="absolute inset-0 bg-white opacity-10 rounded-2xl filter blur-xl"></div>
           <div className="relative z-10">
-            <h2 className="text-6xl font-bold mb-6 text-center text-slate-700 drop-shadow-md mt-4">Sign Up</h2>
+            <h2 className="font-bold mb-6 text-center text-slate-700 drop-shadow-md mt-4 xl:text-6xl lg:text-5xl md:text-4xl sm:text-4xl text-3xl">Sign Up</h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div>
-                <label htmlFor="name" className="block text-xl text-blue-950 font-semibold mb-2 mt-10">Name</label>
+                <label htmlFor="name" className="block xl:text-2xl lg:text-2xl md:text-xl text-blue-950 font-semibold mb-2 mt-10">Name</label>
                 <input
                   type="text"
                   id="name"
                   {...register('name', { required: 'Name is required' })}
-                  className="w-full text-black text-xl px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-opacity-70"
+                  className="w-full text-black text-xl px-4 py-3 lg:w-full sm:w-full bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-opacity-70"
                   placeholder="Enter your name"
                 />
                 {errors.name && <p className="text-red-300 text-sm mt-1">{errors.name.message}</p>}
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-xl text-blue-950 font-semibold mb-2">Email</label>
+                <label htmlFor="email" className="block xl:text-2xl lg:text-2xl md:text-xl text-blue-950 font-semibold mb-2 mt-10">Email</label>
                 <input
                   type="email"
                   id="email"
@@ -87,14 +87,14 @@ console.log(response.status);
                       message: 'Email is invalid',
                     },
                   })}
-                  className="w-full text-black text-xl px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-opacity-70"
+                  className="w-full text-black text-xl px-4 py-3 lg:w-full sm:w-full bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-opacity-70"
                   placeholder="Enter your email"
                 />
                 {errors.email && <p className="text-red-300 text-sm mt-1">{errors.email.message}</p>}
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-xl text-blue-950 font-semibold mb-2">Password</label>
+                <label htmlFor="password" className="block xl:text-2xl lg:text-2xl md:text-xl text-blue-950 font-semibold mb-2 mt-10">Password</label>
                 <input
                   type="password"
                   id="password"
@@ -105,7 +105,7 @@ console.log(response.status);
                       message: 'Password must be at least 6 characters long',
                     },
                   })}
-                  className="w-full text-black text-xl px-4 py-3 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-opacity-70"
+                  className="w-full text-black text-xl px-4 py-3 lg:w-full sm:w-full bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 placeholder-opacity-70"
                   placeholder="Enter your password"
                 />
                 {errors.password && <p className="text-red-300 text-sm mt-1">{errors.password.message}</p>}
@@ -113,7 +113,9 @@ console.log(response.status);
 
               <button
                 type="submit"
-                className="w-36 text-2xl items-center bg-purple-400 text-blue-950 font-semibold py-4 px-4 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50 transform transition duration-200 hover:scale-105 shadow-md" style={{marginTop:"60px", marginLeft:"35%"}}
+                className="w-64 text-2xl items-center bg-purple-400 text-blue-950 font-semibold py-6 px-6 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-2
+                                             focus:ring-purple-500 focus:ring-opacity-50 transform transition duration-200 
+                                             hover:scale-105 shadow-md lg:mt-[35px] lg:ml-[165px] md:mt-[35px] md:ml-[115px] sm:mt-[35px] sm:ml-[90px] xs:mt-[35px] xs:ml-[65px] md:w-50 sm:w-36 xs:w-36 xs:py-4 xs:text-lg"
               >
                 Sign Up
               </button>
