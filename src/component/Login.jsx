@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import "./LoginSignup.css"
 import api from "../data/api";
-import login from "../redux/authSlice";
+// import login from "../redux/authSlice";
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -25,8 +25,10 @@ const Login = () => {
                 });
                 document.cookie = `jwtToken=${response.data.token}; Path=/; HttpOnly`; 
                 
+                console.log(response)
                 if (response.status === 200) {
                     localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('userData', JSON.stringify(response.data.user));
                     // Handle successful login, e.g., store token, redirect, etc.
                     // dispatch(login(response.data.user)); 
                     // Reset form fields

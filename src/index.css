@@ -106,3 +106,9 @@ body{
   background-color: #f00;
   color: #160101;
 }
+.carousel-control-next-icon{
+  visibility: hidden;
+}
+.carousel-control-prev-icon{
+  visibility: hidden;
+}

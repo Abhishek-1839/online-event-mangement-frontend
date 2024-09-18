@@ -4,16 +4,14 @@ import secondSlide from '../assets/Slider2.jpg'
 
 function Carousell() {
     return (
-        <Carousel data-bs-theme="dark" interval={2000} prevIcon={null} nextIcon={null}>
+        <Carousel data-bs-theme="dark" interval={20000}>
             <Carousel.Item>
                 <img
                     className="d-block lg:w-full md:w-96 sm:w-52 w-100"
                     src={firstSlide}
                     alt="First slide"
                 />
-                <Carousel.Caption>
-                   
-                </Carousel.Caption>
+             
             </Carousel.Item>
             <Carousel.Item>
                 <img
@@ -21,9 +19,7 @@ function Carousell() {
                     src={secondSlide}
                     alt="Second slide"
                 />
-                <Carousel.Caption>
-                    
-                </Carousel.Caption>
+           
             </Carousel.Item>
         </Carousel>
     );
