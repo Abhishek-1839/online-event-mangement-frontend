@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import "./LoginSignup.css"
 import api from "../data/api";
+import { setToken } from '../redux/authSlice'; 
 // import login from "../redux/authSlice";
 
 const Login = () => {
@@ -23,14 +24,28 @@ const Login = () => {
                     email: data.email,
                     password: data.password,
                 });
-                document.cookie = `jwtToken=${response.data.token}; Path=/; HttpOnly`; 
+                // document.cookie = `jwtToken=${response.data.token}; Path=/; HttpOnly`; 
                 
                 console.log(response)
                 if (response.status === 200) {
-                    localStorage.setItem('token', response.data.token);
-                    localStorage.setItem('userData', JSON.stringify(response.data.user));
+                    // localStorage.setItem('token', response.data.token);
+                    // localStorage.setItem('userData', JSON.stringify(response.data.user));
                     // Handle successful login, e.g., store token, redirect, etc.
                     // dispatch(login(response.data.user)); 
+
+                    const token = response.data.token;
+                    const user =response.data.user;
+
+                    
+                    // Dispatch the setToken action to store the token in Redux and decode it
+                    dispatch(setToken(token));
+    
+                    // Optionally store the token in localStorage
+                                 // Optionally set the token in localStorage (can be managed in Redux)
+                localStorage.setItem('token', token);
+                localStorage.setItem('userData', JSON.stringify(user));
+
+
                     // Reset form fields
                     reset();
     

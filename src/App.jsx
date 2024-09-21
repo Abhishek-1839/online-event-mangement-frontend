@@ -12,37 +12,32 @@ import BuyTicket from './component/BuyTicket';
 import EventCalendar from './component/EventCalendar';
 import MainLayout from './component/MainLayout';
 import SimpleLayout from './component/SimpleLayout';
-import ProtectedRoute from './component/ProtectedRoute';
-import { AuthProvider } from './context/Authcontext';
-
-
-
+import PrivateRoute from './component/PrivateRoute';
 
 
 
 function App() {
 
-
   return (
     <>
       <div>
-<AuthProvider>
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route element={<MainLayout />}>
 
             <Route path="/eventform" element={
-              <ProtectedRoute>
+              <PrivateRoute>
                 <EventForm />
-              </ProtectedRoute>
+              </PrivateRoute>
             }
             />
             <Route
               path="/buy-ticket/:eventId"
               element={
-                <ProtectedRoute>
+                <PrivateRoute>
                   <BuyTicket />
-                </ProtectedRoute>
+                </PrivateRoute>
               }
             />
             <Route path="/eventschedule" element={<EventCalendar />} />
@@ -58,7 +53,7 @@ function App() {
           </Route>
         </Routes>
 
-        </AuthProvider>
+
       </div>
     </>
   )

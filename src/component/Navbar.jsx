@@ -1,13 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../redux/authSlice';
+import { logout, setToken } from '../redux/authSlice'; // Import the Redux actions
+import { jwtDecode } from 'jwt-decode';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const isLoggedIn = useSelector(state => state.auth.isAuthenticated);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+
+      // Check local storage or cookies on initial load to sync Redux state
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        dispatch(setToken(token)); // Set the token in Redux if found
+      } catch (error) {
+        console.error('Invalid token:', error);
+        localStorage.removeItem('token'); // Remove invalid token
+        dispatch(logout());
+      }
+    }
+  }, [dispatch]);
+
+
 
     const handleClick = () => {
         navigate('/eventschedule');
