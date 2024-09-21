@@ -7,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 const Navbar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const isLoggedIn = useSelector(state => state.auth.isAuthenticated);
+    const { isAuthenticated, role } = useSelector(state => state.auth); // Access role from Redux state
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 
@@ -17,6 +17,7 @@ const Navbar = () => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
+        console.log(decoded);
         dispatch(setToken(token)); // Set the token in Redux if found
       } catch (error) {
         console.error('Invalid token:', error);
@@ -26,7 +27,10 @@ const Navbar = () => {
     }
   }, [dispatch]);
 
-
+  const handleAnalytics = () => {
+    navigate('/event-analytics');
+    setIsMenuOpen(false);
+};
 
     const handleClick = () => {
         navigate('/eventschedule');
@@ -39,7 +43,7 @@ const Navbar = () => {
     }
 
     const handleauth = () => {
-        if (isLoggedIn) {
+        if (isAuthenticated) {
             localStorage.removeItem('token');
             dispatch(logout());
             navigate('/');
@@ -69,8 +73,11 @@ const Navbar = () => {
                 <div className="lg:flex md:hidden sm:hidden hidden items-center space-x-4">
                     <NavButton onClick={handleClick}>Event Schedules</NavButton>
                     <NavButton onClick={handleEvent}>Add your event</NavButton>
+                    {isAuthenticated && role === 'admin' && (
+                        <NavButton onClick={handleAnalytics}>Event Analytics</NavButton>
+                    )}
                     <NavButton onClick={handleauth}>
-                        {isLoggedIn ? 'Logout' : 'Login/Register'}
+                        {isAuthenticated ? 'Logout' : 'Login/Register'}
                     </NavButton>
                 </div>
             </div>
@@ -80,8 +87,12 @@ const Navbar = () => {
                 <div className="mt-4 md:flex flex-col">
                     <NavButton className="block w-full mb-2" onClick={handleClick}>Event Schedules</NavButton>
                     <NavButton className="block w-full mb-2" onClick={handleEvent}>Add your event</NavButton>
+                    {isAuthenticated && role === 'admin' && (
+                        <NavButton className="block w-full mb-2" onClick={handleAnalytics}>Event Analytics</NavButton>
+                    )}
+
                     <NavButton className="block w-full mb-2" onClick={handleauth}>
-                        {isLoggedIn ? 'Logout' : 'Login/Register'}
+                        {isAuthenticated ? 'Logout' : 'Login/Register'}
                     </NavButton>
                 </div>
             )}

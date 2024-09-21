@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import AuthContext from "../context/Authcontext";
+import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import api from "../data/api";
 import { loadStripe } from "@stripe/stripe-js"; // Import Stripe
 
 const BuyTicket = () => {
-    const { userId } = useContext(AuthContext);
+    const userId = useSelector((state) => state.auth.userId);
     console.log('User ID for payment:', userId);
     const { eventId } = useParams();
     const [event, setEvent] = useState(null);
@@ -47,26 +47,65 @@ const BuyTicket = () => {
         setFinalPrice(onwardPrice + selected.price);
     };
 
-    const handlePayment = async () => {
-         console.log('User ID for payment:', userId);
-        try {
+    const handlePayment = () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            console.error("No token found");
+            return;
+        }
+        console.log("Token being sent:", token); 
+        // Step 1: Create ticket in the backend
+        api.post('/ticketapi/tickets', {
+            eventId,
+            purchaserId: userId,
+            ticketTypeName: selectedTicketType,
+            paymentAmount: finalPrice, // Send final calculated price
+            currency: 'INR',
+            paymentMethod: 'card',
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            const ticket = response.data.ticket; // Get the created ticket
+            console.log("Ticket created:", ticket);
+            
+            // Step 2: Now, initiate Stripe checkout session
             const stripePromise = loadStripe('pk_test_51PyGFxHRivblCT2OOt8W9uUMHs4u56ZfDAbK2ZHhFTgRlnLaxFAReUnLhOAK3b40mEJ9A0ulzAMlnTQTwvQ8YTk000oQ8eGDMs');
-            const stripe = await stripePromise; 
-            const response = await api.post('/ticketapi/tickets', {
+            
+            return stripePromise; // Return the stripe object promise
+        })
+        .then(async (stripe) => {
+            // Step 3: Call the backend to create the Stripe session
+            return api.post('/checkout', {
                 eventId,
                 purchaserId: userId,
                 ticketTypeName: selectedTicketType,
-                paymentAmount: finalPrice, // Send final calculated price
-                paymentMethod: 'card',
-            });
+                paymentAmount: finalPrice,
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`, 
+                }
+            })
+            .then(response => {
+                const sessionId = response.data.sessionId;
+                console.log("Stripe session created with ID:", sessionId);
 
-            const session = response.data;
-            await stripe.redirectToCheckout({ sessionId: session.stripeSessionId });
-            // Redirect to Stripe payment or display success message
-            // window.location.href = `/payment/${response.data.stripe.productId}`;
-        } catch (error) {
-            console.error('Payment failed', error);
-        }
+                // Step 4: Redirect to Stripe checkout
+                return stripe.redirectToCheckout({ sessionId });
+            });
+        })
+        .then((result) => {
+            if (result.error) {
+                console.error("Stripe checkout error:", result.error);
+                // Handle error during Stripe redirection if needed
+            }
+        })
+        .catch(error => {
+            console.error("Error during payment process:", error);
+            // Handle error in ticket creation or stripe checkout
+        });
     };
 
     if (!event) {

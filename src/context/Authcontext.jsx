@@ -6,7 +6,7 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [userId, setUserId] = useState(null);
-
+console.log("trying to error")
     useEffect(() => {
         const token = document.cookie.split('. ').find(row => row.startsWith('jwtToken='))?.split('=')[1];
         console.log('JWT Token:', token);
