@@ -19,10 +19,12 @@ const Login = () => {
     const navigate = useNavigate(); 
         
         const onSubmit = async (data) => {
+            console.log('Submitting login form:', data);
             try {
                 const response = await api.post('/login', {
                     email: data.email,
                     password: data.password,
+                    role: data.role,
                 });
                 // document.cookie = `jwtToken=${response.data.token}; Path=/; HttpOnly`; 
                 
@@ -35,7 +37,15 @@ const Login = () => {
 
                     const token = response.data.token;
                     const user =response.data.user;
-
+    //    // Check if the user's actual role matches the selected role
+    //    if (user.role !== data.role) {
+    //     if (user.role === 'admin') {
+    //         alert("You are an admin. Please log in using the admin option.");
+    //     } else {
+    //         alert("You are not an admin. Please log in using the non-admin option.");
+    //     }
+    //     return; // Stop the login process
+    // }
                     
                     // Dispatch the setToken action to store the token in Redux and decode it
                     dispatch(setToken(token));
@@ -55,6 +65,7 @@ const Login = () => {
             } catch (error) {
                 console.error("Error during login:", error);
                 // Optionally, handle error (show error message, etc.)
+                alert(error.response?.data?.error || "Login failed. Please check your credentials and try again.");
             }
         };
 
@@ -111,6 +122,20 @@ const Login = () => {
                                             {errors.password && <p className="text-red-300 text-sm mt-1">{errors.password.message}</p>}
                                         </div>
 
+
+                                        <div>
+                <label htmlFor="role" className="block xl:text-2xl lg:text-2xl md:text-xl text-blue-950 font-semibold mb-2 mt-10">Role</label>
+                <select
+                    id="role"
+                    {...register('role', { required: 'Role is required' })}
+                    className="w-full text-black text-xl px-4 py-3 lg:w-full sm:w-full bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                >
+                    <option value="">Select role</option>
+                    <option value="admin">Admin</option>
+                    <option value="user">Not Admin</option>
+                </select>
+                {errors.role && <p className="text-red-300 text-sm mt-1">{errors.role.message}</p>}
+            </div>
                                         <button
                                             type="submit"
                                             className="w-36 text-2xl items-center bg-purple-400 text-blue-950 font-semibold py-6 px-6 rounded-lg hover:bg-opacity-90 focus:outline-none focus:ring-2
