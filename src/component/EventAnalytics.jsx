@@ -56,7 +56,7 @@ const EventAnalytics = () => {
         backgroundColor: 'rgba(153, 102, 255, 0.6)',
       },
       {
-        label: 'Ticket Payment Status',
+        label: 'Ticket Successful Payment Status',
         data: ticketStatus,
         backgroundColor: 'rgba(0,0,0, 0.6)',
       },

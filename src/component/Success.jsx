@@ -3,13 +3,13 @@ import { useLocation } from 'react-router-dom'; // To get query par
 import api from "../data/api";
 
 const Success = () => {
+  const location = useLocation();
 const [ticketId, setTicketId] = useState(null);
-const [paymentStatus, setPaymentStatus] = useState();
+const [paymentStatus, setPaymentStatus] = useState('pending');
 
-const location = useLocation();
+
   const queryParams = new URLSearchParams(location.search);
   const sessionId = queryParams.get('session_id'); // Get session_id from URL
-
   
   useEffect(() => {
     const fetchTicketId = async () => {
@@ -29,28 +29,36 @@ const location = useLocation();
     }
   }, [sessionId]);
 
- 
   useEffect(() => {
-    const checkPaymentStatus = async () => {
-      if (ticketId) {
+    const confirmPayment = async () => {
+      if (ticketId && sessionId) {
         try {
-          const response = await api.get(`/ticketapi/tickets/${ticketId}/status`);
-          setPaymentStatus(response.data.status);
+          // Call your backend API to confirm the payment
+          const response = await api.post(`/ticketapi/tickets/${ticketId}/confirmPayment?session_id=${sessionId}`);
+          console.log('Payment confirmation:', response.data);
+          setPaymentStatus('paid');
         } catch (error) {
-          console.error('Error fetching payment status:', error);
+          console.error('Error confirming payment:', error);
+          setPaymentStatus('failed');
         }
       }
     };
 
-    if (ticketId) {
-      checkPaymentStatus(); // Check payment status after getting ticketId
+    if (ticketId && sessionId) {
+      confirmPayment(); // Trigger the confirmation after successful redirect
     }
-  }, [ticketId]);
+  }, [ticketId, sessionId]);
+
   
   return (
     <div className="text-center">
-    <h1>Payment Status</h1>
-    <p>{paymentStatus === 'paid' ? 'Your payment was successful!' : 'Processing your payment...'}</p>
+    {paymentStatus === 'paid' ? (
+        <h2 className="font-bold mb-6 text-center text-slate-700 drop-shadow-md mt-4 xl:text-6xl lg:text-5xl md:text-4xl sm:text-3xl text-3xl">Your payment was successful!</h2>
+      ) : paymentStatus === 'failed' ? (
+        <h2 className="font-bold mb-6 text-center text-slate-700 drop-shadow-md mt-4 xl:text-6xl lg:text-5xl md:text-4xl sm:text-3xl text-3xl">Payment confirmation failed. Please contact support.</h2>
+      ) : (
+        <h2 className="font-bold mb-6 text-center text-slate-700 drop-shadow-md mt-4 xl:text-6xl lg:text-5xl md:text-4xl sm:text-3xl text-3xl">Processing payment confirmation...</h2>
+      )}
   </div>
   )
 }
