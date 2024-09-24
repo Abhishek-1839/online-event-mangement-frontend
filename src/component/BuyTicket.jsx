@@ -62,11 +62,14 @@ const BuyTicket = () => {
             paymentAmount: finalPrice, // Send final calculated price
             currency: 'INR',
             paymentMethod: 'card',
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
+        }
+        // , 
+        // {
+        //     headers: {
+        //         'Authorization': `Bearer ${token}`
+        //     }
+        // }
+        )
         .then(response => {
             const ticket = response.data.ticket; // Get the created ticket
             console.log("Ticket created:", ticket);
@@ -83,11 +86,13 @@ const BuyTicket = () => {
                 purchaserId: userId,
                 ticketTypeName: selectedTicketType,
                 paymentAmount: finalPrice,
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`, 
-                }
-            })
+            }
+            // , {
+            //     headers: {
+            //         'Authorization': `Bearer ${token}`, 
+            //     }
+            // }
+        )
             .then(response => {
                 const sessionId = response.data.sessionId;
                 console.log("Stripe session created with ID:", sessionId);

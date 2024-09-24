@@ -6,8 +6,8 @@ const api = axios.create
   baseURL: 'https://online-event-management-backend.onrender.com',
   headers: {
     'Content-Type': 'application/json',
-  },
-  withCredentials : true,
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  }
 });
 
 export default api;
