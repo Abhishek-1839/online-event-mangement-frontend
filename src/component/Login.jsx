@@ -30,22 +30,11 @@ const Login = () => {
                 
                 console.log(response)
                 if (response.status === 200) {
-                    // localStorage.setItem('token', response.data.token);
-                    // localStorage.setItem('userData', JSON.stringify(response.data.user));
-                    // Handle successful login, e.g., store token, redirect, etc.
-                    // dispatch(login(response.data.user)); 
+                    
 
                     const token = response.data.token;
                     const user =response.data.user;
-    //    // Check if the user's actual role matches the selected role
-    //    if (user.role !== data.role) {
-    //     if (user.role === 'admin') {
-    //         alert("You are an admin. Please log in using the admin option.");
-    //     } else {
-    //         alert("You are not an admin. Please log in using the non-admin option.");
-    //     }
-    //     return; // Stop the login process
-    // }
+    //  
                     
                     // Dispatch the setToken action to store the token in Redux and decode it
                     dispatch(setToken(token));
@@ -62,6 +51,18 @@ const Login = () => {
                     // Redirect to another page (e.g., dashboard)
                     navigate('/');
                 }
+                else if (response.status === 403) {
+                    // Handle the role mismatch scenario
+                    if (response.data.error.includes('admin')) {
+                      alert('You are an admin. Please log in using the admin option.');
+                    } else {
+                      alert('You are not an admin. Please log in using the non-admin option.');
+                    }
+                  } else {
+                    // Handle other error cases
+                    alert(response.data.error || 'Login failed. Please check your credentials and try again.');
+                  }
+                
             } catch (error) {
                 console.error("Error during login:", error);
                 // Optionally, handle error (show error message, etc.)
