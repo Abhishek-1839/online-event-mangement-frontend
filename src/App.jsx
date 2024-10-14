@@ -9,7 +9,6 @@ import ForgotPassword from './component/ForgotPassword';
 import ResetPassword from './component/ResetPassword';
 import AdminProtectedRoute from './component/AdminProtectedRoute';
 import EventAnalytics from './component/EventAnalytics';
-// import ActivationSuccess from './component/ActivationSuccess';
 import EventForm from './component/EventForm';
 import BuyTicket from './component/BuyTicket';
 import EventCalendar from './component/EventCalendar';
